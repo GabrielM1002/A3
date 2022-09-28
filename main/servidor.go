@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Função main
 func main() {
 	fmt.Println("[Servidor Online]")
 	l, err := net.Listen("tcp", "localhost:8080") // Inicia a conexão TCP na porta
