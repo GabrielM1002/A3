@@ -27,12 +27,14 @@ func main() {
 	fmt.Println("Cliente conectado ao servidor!")
 
 	for { // Laço eterno
+
 		// Recebe informações no buffer de leitura
 		netData, err := bufio.NewReader(c).ReadString('\n')
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+
 		// Se for EXIT, fecha o sevidor, mas fecha a conexão antes
 		if strings.ToUpper(strings.TrimSpace(string(netData))) == "SAIR" {
 			fmt.Println("Cliente finalizou sua sessão.")
@@ -43,6 +45,8 @@ func main() {
 		fmt.Print("Cliente > ", string(netData))
 		t := time.Now()
 		myTime := "Recebido em: " + t.Format(time.RFC3339) + "\n"
-		c.Write([]byte(myTime)) // Escreve no buffer de escrita para o cliente
+
+		// Escreve no buffer de escrita para o cliente
+		c.Write([]byte(myTime))
 	}
 }
