@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"net"
+	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -16,10 +18,14 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	defer l.Close() // Ao final, fecha a conexão.
+
+	// Ao final, fecha a conexão.
+	defer l.Close()
+
 	fmt.Println("Aguardando conexões...")
 
-	c, err := l.Accept() // Fica aguardando um cliente se conectar
+	// Fica aguardando um cliente se conectar
+	c, err := l.Accept()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -35,14 +41,19 @@ func main() {
 			return
 		}
 
-		// Se for EXIT, fecha o sevidor, mas fecha a conexão antes
+		// Se for SAIR, fecha o sevidor, mas fecha a conexão antes
 		if strings.ToUpper(strings.TrimSpace(string(netData))) == "SAIR" {
 			fmt.Println("Cliente finalizou sua sessão.")
 			return
 		}
 
+		// Converter o texto em int (netData em intVar)
+		strVar := strings.ToUpper(strings.TrimSpace(string(netData)))
+		intVar, err := strconv.Atoi(strVar)
+		fmt.Println(intVar, err, reflect.TypeOf(intVar))
+
 		// Mostra a mensagem na tela e envia de volta o horário
-		fmt.Print("Cliente > ", string(netData))
+		fmt.Print("Cliente > ", string(strVar))
 		t := time.Now()
 		myTime := "Recebido em: " + t.Format(time.RFC3339) + "\n"
 
