@@ -34,7 +34,11 @@ func main() {
 	}
 	fmt.Println("Cliente conectado ao servidor!")
 
-	for { // Laço eterno
+	// Laço eterno
+	// Laço eterno
+	// Laço eterno
+	// Laço eterno
+	for {
 
 		// Recebe informações no buffer de leitura
 		netData, err := bufio.NewReader(c).ReadString('\n')
@@ -46,39 +50,45 @@ func main() {
 		// Limpa o netData
 		strVar := strings.ToUpper(strings.TrimSpace(string(netData)))
 
-		// Se for SAIR, fecha o sevidor, mas fecha a conexão antes
+		// SAIR: fecha o sevidor, mas fecha a conexão antes
 		if strVar == "SAIR" {
 			fmt.Println("Cliente finalizou sua sessão.")
 			return
 		}
 
+		// VOLTAR: volta para a frase inicial
 		if strVar == "VOLTAR" {
 			partCount = 0
 		}
 
-		// Converter o texto em int (strVar em intVar)
+		// Converter mensagem do cliente em int
 		intVar, err := strconv.Atoi(strVar)
 		fmt.Println(intVar, err, reflect.TypeOf(intVar))
 
+		//partCounts
+		//partCounts
+		//partCounts
+		//partCounts
+		// Contadores que simulam um switch
+		// Parte1: MULTIPLICA POR 2
 		if partCount == 1 {
 
 			// Conta
 			result := intVar * 2
 
-			// Converte para string
-			s1 := strconv.FormatInt(int64(result), 10)
+			// Converte resultado para string
 			s2 := strconv.Itoa(result)
-			fmt.Printf("%v, %v\n", s1, s2)
 
 			// Printa no cliente
 			c.Write([]byte(" Resultado: " + s2 + ". Digite VOLTAR para voltar.\n"))
 
+			// Parte2: DIVIDE POR 2
 		} else if partCount == 2 {
 
 			// Conta
 			result := intVar / 2
 
-			// Converte para string
+			// Converte resultado para string
 			s1 := strconv.FormatInt(int64(result), 10)
 			s2 := strconv.Itoa(result)
 			fmt.Printf("%v, %v\n", s1, s2)
@@ -86,12 +96,13 @@ func main() {
 			// Printa no cliente
 			c.Write([]byte(" Resultado: " + s2 + ". Digite VOLTAR para voltar.\n"))
 
+			// Parte3: MULTIPLICA POR ELE MESMO
 		} else if partCount == 3 {
 
 			// Conta
 			result := intVar * intVar
 
-			// Converte para string
+			// Converte resultado para string
 			s1 := strconv.FormatInt(int64(result), 10)
 			s2 := strconv.Itoa(result)
 			fmt.Printf("%v, %v\n", s1, s2)
@@ -99,6 +110,7 @@ func main() {
 			// Printa no cliente
 			c.Write([]byte(" Resultado: " + s2 + ". Digite VOLTAR para voltar.\n"))
 
+			// Parte0: Escolhe o que fazer
 		} else if partCount == 0 {
 
 			if strVar == "1" {
@@ -124,21 +136,17 @@ func main() {
 				message := "Digite 1 para MULTIPLICAR POR 2; Digite 2 para DIVIDIR POR 2; Digite 3 para MULTIPLICAR POR ELE MESMO." + "\n"
 				c.Write([]byte(message))
 			}
+
+			// Parte0: Printa frase inicial com as opções
+		} else if partCount == 0 {
+
+			// Printa mensagem no servidor
+			fmt.Print("Cliente > ", string(strVar))
+
+			// Mensagem para o cliente
+			start := "Digite 1 para MULTIPLICAR POR 2; Digite 2 para DIVIDIR POR 2; Digite 3 para MULTIPLICAR POR ELE MESMO." + "\n"
+			c.Write([]byte(start))
 		}
 
-		// Mostra a mensagem na tela e envia de volta o horário
-		fmt.Print("Cliente > ", string(strVar))
-		myTime := "Digite 1 para MULTIPLICAR POR 2; Digite 2 para DIVIDIR POR 2; Digite 3 para MULTIPLICAR POR ELE MESMO." + "\n"
-
-		// Escreve no buffer de escrita para o cliente
-		c.Write([]byte(myTime))
 	}
-}
-
-func divideByTwo(num1 int) (int, error) {
-	return num1 / 2, nil
-}
-
-func multiplyByTwo(num1 int) (int, error) {
-	return num1 * 2, nil
 }
