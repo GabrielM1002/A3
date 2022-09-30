@@ -34,7 +34,7 @@ func main() {
 
 		// Aguarda resposta do servidor
 		message, _ := bufio.NewReader(c).ReadString('\n')
-		fmt.Print("Servidor > " + message)
+		fmt.Print(message)
 
 		// Se a resposta for EXIT, fecha a conexão e o cliente
 		if strings.ToUpper(strings.TrimSpace(string(text))) == "SAIR" {
