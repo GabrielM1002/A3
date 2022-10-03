@@ -10,26 +10,31 @@ import (
 
 func main() {
 
-	// Usa os argumentos e se conecta ao servidor host:port
-	c, err := net.Dial("tcp", "localhost:8080")
+	arguments := os.Args     // Pega os argumentos da linha de comando
+	if len(arguments) == 1 { // Se não inserir o valor da porta, exibe a mensagem abaixo
+		fmt.Print("[!] Insira o endereço e a porta primeiro. ex: localhost:8080")
+		return
+	}
+
+	// Usa os argumentos e se conecta ao servidor host:porta
+	c, err := net.Dial("tcp", arguments[1])
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer c.Close()
-	fmt.Print("Escreva sua mensagem.")
-	fmt.Println(" Digite sair para cancelar")
+	fmt.Print("[!] Bem vindo(a)! Pressione ENTER para acessar o Menu \n")
 	for {
 		reader := bufio.NewReader(os.Stdin) // Prepara o buffer de leitura
-		fmt.Print("-> ")
-		text, _ := reader.ReadString('\n') // Le um texto do teclado
-		fmt.Fprintf(c, text+"\n")          // Envia o texto pela conexão
+		fmt.Print("--> ")
+		text, _ := reader.ReadString('\n') // Le o texto digitado
+		fmt.Fprintf(c, text+"\n")          // Faz o envio do texto pro servidor
 
 		message, _ := bufio.NewReader(c).ReadString('\n') // Aguarda resposta do servidor
-		fmt.Print("Servidor > " + message)
-		// Se a resposta for EXIT, fecha a conexão e o cliente
+		fmt.Print("Servidor >> " + message)
+		// Se a resposta for SAIR, fecha a conexão e o cliente
 		if strings.ToUpper(strings.TrimSpace(string(text))) == "SAIR" {
-			fmt.Println("Sessão finalizada")
+			fmt.Println("[!] Sessão finalizada")
 			return
 		}
 	}

@@ -10,15 +10,14 @@ import (
 	"strings"
 )
 
-func child(c net.Conn) {
+func filho(c net.Conn) {
 	var partCount int = 0
-	addr := c.RemoteAddr() // Pega o endereço do cliente
-	fmt.Println("Usuário", addr, " conectado")
-	defer fmt.Println("Usuário", addr, " desconectado")
-	defer c.Close() // Ao final, fecha a conexão
+	addr := c.RemoteAddr()                                      // Guarda o endereço do cliente
+	fmt.Println("[+] Usuário", addr, " conectado com sucesso!") //Informa o ID do cliente conectado no servidor
+	defer fmt.Println("[-] Usuário", addr, " desconectado.")    //Informa o ID do cliente desconectado no servidor
+	defer c.Close()                                             // Finaliza conexão no fim
 
 	for {
-		// Recebe informações no buffer de leitura
 		// Recebe informações no buffer de leitura
 		netData, err := bufio.NewReader(c).ReadString('\n')
 		if err != nil {
@@ -35,8 +34,8 @@ func child(c net.Conn) {
 			return
 		}
 
-		// VOLTAR: volta para a frase inicial
-		if strVar == "VOLTAR" {
+		// MENU: volta para o menu
+		if strVar == "MENU" {
 			partCount = 0
 		}
 
@@ -44,9 +43,6 @@ func child(c net.Conn) {
 		intVar, err := strconv.Atoi(strVar)
 		fmt.Println(intVar, err, reflect.TypeOf(intVar))
 
-		//partCounts
-		//partCounts
-		//partCounts
 		//partCounts
 		// Contadores que simulam um switch
 		// Parte1: MULTIPLICA POR 2
@@ -59,7 +55,7 @@ func child(c net.Conn) {
 			s2 := strconv.Itoa(result)
 
 			// Printa no cliente
-			c.Write([]byte(" Resultado: " + s2 + ". Digite VOLTAR para voltar.\n"))
+			c.Write([]byte(" Resultado: " + s2 + ". Digite MENU para voltar.\n"))
 
 			// Parte2: DIVIDE POR 2
 		} else if partCount == 2 {
@@ -73,7 +69,7 @@ func child(c net.Conn) {
 			fmt.Printf("%v, %v\n", s1, s2)
 
 			// Printa no cliente
-			c.Write([]byte(" Resultado: " + s2 + ". Digite VOLTAR para voltar.\n"))
+			c.Write([]byte(" Resultado: " + s2 + ". Digite MENU para voltar.\n"))
 
 			// Parte3: MULTIPLICA POR ELE MESMO
 		} else if partCount == 3 {
@@ -87,7 +83,7 @@ func child(c net.Conn) {
 			fmt.Printf("%v, %v\n", s1, s2)
 
 			// Printa no cliente
-			c.Write([]byte(" Resultado: " + s2 + ". Digite VOLTAR para voltar.\n"))
+			c.Write([]byte(" Resultado: " + s2 + ". Digite MENU para voltar.\n"))
 
 			// Parte0: Escolhe o que fazer
 		} else if partCount == 0 {
@@ -116,7 +112,7 @@ func child(c net.Conn) {
 				c.Write([]byte(message))
 			}
 
-			// Parte0: Printa frase inicial com as opções
+			// Parte0: Printa frase inicial com as opções, caso nenhuma tenha sido escolhida.
 		} else if partCount == 0 {
 
 			// Printa mensagem no servidor
@@ -133,8 +129,8 @@ func child(c net.Conn) {
 // Função main
 func main() {
 	arguments := os.Args     // Pega a porta como argumento da linha de comando
-	if len(arguments) == 1 { // Se não for passado a porta dá erro
-		fmt.Println("Digite o número da porta para inicializar")
+	if len(arguments) == 1 { // Se não for passado a porta, envia a mensagem abaixo:
+		fmt.Println("[!] Digite o número da porta para inicializar.")
 		return
 	}
 	l, err := net.Listen("tcp", ":"+arguments[1]) // Configura uma porta TCP
@@ -142,15 +138,15 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	defer l.Close() // Ao final, fecha a conexão.
-	fmt.Println("Servidor TCP inicializado na porta:", arguments[1])
+	defer l.Close() // Finaliza a conexão no final
+	fmt.Println("[!] Servidor inicializado na porta:", arguments[1])
 
 	for {
-		c, err := l.Accept() // Aguarda o próximo cliente se conectar
+		c, err := l.Accept() // Aguarda conexão de outro cliente simultâneo
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		go child(c) // Passa a conexão para uma gorotine gerenciar
+		go filho(c) // Passa o gerenciamento da conexão para a gorotutine "filho"
 	}
 }
