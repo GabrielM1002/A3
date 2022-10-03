@@ -65,7 +65,7 @@ func filho(c net.Conn) {
 			// Conta
 			result := intVar / 2
 
-			// Converte resultado para string
+			// Converte resultado para string 
 			s1 := strconv.FormatInt(int64(result), 10)
 			s2 := strconv.Itoa(result)
 			fmt.Printf("%v, %v\n", s1, s2)
