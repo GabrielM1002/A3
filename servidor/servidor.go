@@ -11,7 +11,9 @@ import (
 )
 
 func filho(c net.Conn) {
-	var partCount int = 0
+	var (
+		num1, num2, num3, num4, partCount int = 0, 0, 0, 0, 0 //instanciando as variaveis matemáticas
+	)
 	addr := c.RemoteAddr()                                       // Guarda o endereço do cliente
 	fmt.Println("[+] Usuário", addr, " conectado com sucesso! ") //Informa o ID do cliente conectado no servidor
 	defer fmt.Println("[-] Usuário", addr, " desconectado.")     //Informa o ID do cliente desconectado no servidor
@@ -43,7 +45,7 @@ func filho(c net.Conn) {
 		intVar, err := strconv.Atoi(strVar)
 		fmt.Println(intVar, err, reflect.TypeOf(intVar))
 
-		//partCounts
+		// partCounts
 		// Contadores que simulam um switch
 		// Parte1: MULTIPLICA POR 2
 		if partCount == 1 {
@@ -85,7 +87,44 @@ func filho(c net.Conn) {
 			// Printa no cliente
 			c.Write([]byte(" Resultado: " + s2 + ". Digite MENU para voltar.\n"))
 
+			// Parte4: Digite o segundo número
+		} else if partCount == 4 {
+
+			// salva o numero
+			num1 = intVar
+
+			// Printa no cliente
+			c.Write([]byte(" Digite o Segundo número:  \n"))
+			partCount = 5
+
 			// Parte0: Escolhe o que fazer
+		} else if partCount == 5 {
+
+			// salva o numero
+			num2 = intVar
+
+			// Printa no cliente
+			c.Write([]byte(" Digite o Terceiro número:  \n"))
+
+			partCount = 6
+
+		} else if partCount == 6 {
+
+			// salva o numero
+			num3 = intVar
+
+			// Conta
+			num4 = (num1 + num2 + num3) / 3
+
+			// Converte para string
+			s1 := strconv.FormatInt(int64(num4), 10)
+			s2 := strconv.Itoa(num4)
+			fmt.Printf("%v, %v\n", s1, s2)
+
+			// Printa no cliente
+			c.Write([]byte(" A Média entre os números é: " + s1 + "\n"))
+			partCount = 0
+
 		} else if partCount == 0 {
 
 			if strVar == "1" {
@@ -106,9 +145,15 @@ func filho(c net.Conn) {
 				partCount = 3
 				c.Write([]byte(message))
 
+			} else if strVar == "4" {
+
+				message := "Você escolheu MÉDIA ENTRE TRÊS NÚMEROS. Digite o primeiro número:  \n"
+				c.Write([]byte(message))
+				partCount = 4
+
 			} else {
 
-				message := "Digite 1 para MULTIPLICAR POR 2; Digite 2 para DIVIDIR POR 2; Digite 3 para MULTIPLICAR POR ELE MESMO." + "\n"
+				message := "Digite 1 para MULTIPLICAR POR 2; Digite 2 para DIVIDIR POR 2; Digite 3 para MULTIPLICAR POR ELE MESMO; Digite 4 para MÉDIA DE 3 NÚMEROS. Ou SAIR para finalizar." + "\n"
 				c.Write([]byte(message))
 			}
 
