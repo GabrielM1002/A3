@@ -12,10 +12,10 @@ import (
 
 func filho(c net.Conn) {
 	var partCount int = 0
-	addr := c.RemoteAddr()                                      // Guarda o endereço do cliente
-	fmt.Println("[+] Usuário", addr, " conectado com sucesso!") //Informa o ID do cliente conectado no servidor
-	defer fmt.Println("[-] Usuário", addr, " desconectado.")    //Informa o ID do cliente desconectado no servidor
-	defer c.Close()                                             // Finaliza conexão no fim
+	addr := c.RemoteAddr()                                       // Guarda o endereço do cliente
+	fmt.Println("[+] Usuário", addr, " conectado com sucesso! ") //Informa o ID do cliente conectado no servidor
+	defer fmt.Println("[-] Usuário", addr, " desconectado.")     //Informa o ID do cliente desconectado no servidor
+	defer c.Close()                                              // Finaliza conexão no fim
 
 	for {
 		// Recebe informações no buffer de leitura
